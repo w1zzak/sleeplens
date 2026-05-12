@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '../lib/prisma';
 import { RegisterInput, LoginInput } from '../schemas/auth.schema';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET no está definido');
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 interface AuthResult {

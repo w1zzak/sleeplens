@@ -5,7 +5,6 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { SleepLogForm } from '@/components/sleep/SleepLogForm';
 import { SleepLogList } from '@/components/sleep/SleepLogList';
 import { SleepLog, CreateSleepLogInput } from '@/types/sleep';
-import { SleepLogFormValues } from '@/schemas/sleep';
 import { api } from '@/lib/api';
 
 export default function LogPage() {
@@ -29,7 +28,7 @@ export default function LogPage() {
     fetchLogs();
   }, []);
 
-  const handleSubmit = async (data: SleepLogFormValues) => {
+  const handleSubmit = async (data: CreateSleepLogInput) => {
     try {
       setError(null);
       await api('/sleep', {
