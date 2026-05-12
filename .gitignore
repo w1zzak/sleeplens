@@ -1,0 +1,49 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Mac / Windows OS files
+.DS_Store
+Thumbs.db
+
+# Frontend (Next.js)
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Backend (Express + TypeScript)
+backend/dist/
+backend/build/
+
+# Bases de datos locales
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+
+# Variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+frontend/.env
+frontend/.env.local
+backend/.env
+backend/.env.local
+
+# Agentes AI (Opcional, pero recomendado no subir datos privados del agente)
+.agents/brain/
+.agents/logs/
+
+# Coverage testing
+coverage/
+*.lcov

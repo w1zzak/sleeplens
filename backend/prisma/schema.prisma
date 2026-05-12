@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime    @default(now())
+  sleepLogs    SleepLog[]
+  chatMessages ChatMessage[]
+}
+
+model SleepLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime @default(now())
+  bedtime     DateTime
+  wakeTime    DateTime
+  duration    Float?   // Calculated in hours
+  quality     Int      // 1-5
+  notes       String?
+
+  // Day factors
+  exercise    Boolean  @default(false)
+  caffeine    Boolean  @default(false)
+  alcohol     Boolean  @default(false)
+  stress      Int      @default(0) // 1-5
+  screenTime  Boolean  @default(false)
+
+  // AI outputs
+  aiInsight   String?  // Daily insight generated on save
+  weeklyReport String? // Auto-generated weekly report
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   // "user" | "assistant"
+  content   String
+  createdAt DateTime @default(now())
+}
