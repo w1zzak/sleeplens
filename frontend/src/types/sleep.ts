@@ -30,3 +30,9 @@ export interface CreateSleepLogInput {
   stress?: number;
   screenTime?: boolean;
 }
+
+export interface SleepStats {
+  avgDuration: number;
+  avgQuality: number;
+  currentStreak: number;
+}

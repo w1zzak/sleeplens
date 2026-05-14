@@ -26,7 +26,7 @@ export const SleepLogList: React.FC<SleepLogListProps> = ({ logs, onDelete }) =>
           <div>
             <div className="flex items-center gap-3 mb-1">
               <span className="font-semibold text-slate-primary">
-                {new Date(log.date).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })}
+                {new Date(log.bedtime).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })}
               </span>
               <span className="text-xs px-2 py-1 bg-accent/20 text-accent-light rounded-full font-medium">
                 Calidad: {log.quality}/5

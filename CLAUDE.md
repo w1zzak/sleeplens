@@ -21,7 +21,7 @@ Sleep tracking app with AI insights. Portfolio project showcasing full-stack dev
 - **Database**: SQLite
 - **Auth**: JWT (jsonwebtoken)
 - **Validation**: Zod
-- **AI**: Anthropic SDK (`@anthropic-ai/sdk`)
+- **AI**: Google Generative AI SDK (`@google/generative-ai`)
 
 ---
 
@@ -116,7 +116,7 @@ sleeplens/
 │   │   │   └── validate.ts         # Zod request validation middleware
 │   │   ├── lib/
 │   │   │   ├── prisma.ts           # Prisma client singleton
-│   │   │   └── anthropic.ts        # Anthropic client singleton
+│   │   │   └── gemini.ts           # Gemini client singleton
 │   │   ├── schemas/                # Zod schemas for request bodies
 │   │   ├── types/                  # TypeScript interfaces
 │   │   └── index.ts                # Express app entry point
@@ -197,7 +197,7 @@ model ChatMessage {
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="your-super-secret-key-here"
 JWT_EXPIRES_IN="7d"
-ANTHROPIC_API_KEY="sk-ant-..."
+GEMINI_API_KEY="AIzaSy..."
 PORT=3001
 NODE_ENV="development"
 ```
@@ -209,9 +209,9 @@ NEXT_PUBLIC_API_URL="http://localhost:3001/api"
 
 ---
 
-## AI Features (Anthropic API)
+## AI Features (Google Gemini API)
 
-All AI calls use `claude-3-5-haiku-20241022` for speed/cost efficiency. Use `claude-3-5-sonnet-20241022` only for the weekly report.
+All AI calls use `gemini-2.5-flash` for speed/cost efficiency. Use `gemini-2.5-pro` only for the weekly report.
 
 ### 1. Daily Insight (`POST /api/sleep/log`)
 - Triggered automatically after saving a sleep log.
@@ -244,7 +244,7 @@ Route → Controller → Service → Prisma
 
 - **Route**: Applies `authMiddleware` and `validate(schema)` middleware, then calls controller.
 - **Controller**: Extracts `req.user.id` and `req.body`, calls service, returns HTTP response.
-- **Service**: All business logic. The only layer that touches Prisma or Anthropic.
+- **Service**: All business logic. The only layer that touches Prisma or Gemini.
 - **No direct Prisma calls outside of services.**
 
 ---
@@ -298,25 +298,25 @@ Route → Controller → Service → Prisma
 
 ---
 
-### 🔄 Phase 3 — History & Dashboard (Next up)
-- [ ] **Backend**: `GET /api/sleep/stats` — prom. horas, prom. calidad, racha actual
-- [ ] **Backend**: `GET /api/sleep/history` — registros filtrados por mes
-- [ ] **Frontend**: `/dashboard` — 3 métricas cards (horas, calidad, racha)
-- [ ] **Frontend**: `/dashboard` — 2 gráficas Recharts (calidad 30 días, horas 30 días)
-- [ ] **Frontend**: `/history` — vista calendario mensual coloreado por calidad
-- [ ] **Frontend**: `/history` — lista de registros del mes seleccionado + navegación
-- [ ] **Frontend**: Navbar/Sidebar global con links (Dashboard, Log, History)
-- [ ] **Frontend**: Redirección automática de `/` a `/dashboard` (si hay auth) o `/login`
+### ✅ Phase 3 — History & Dashboard (Completed 2026-05-13)
+- [x] **Backend**: `GET /api/sleep/stats` — prom. horas, prom. calidad, racha actual
+- [x] **Backend**: `GET /api/sleep/history` — registros filtrados por mes
+- [x] **Frontend**: `/dashboard` — 3 métricas cards (horas, calidad, racha)
+- [x] **Frontend**: `/dashboard` — 2 gráficas Recharts (calidad 30 días, horas 30 días)
+- [x] **Frontend**: `/history` — vista calendario mensual coloreado por calidad
+- [x] **Frontend**: `/history` — lista de registros del mes seleccionado + navegación
+- [x] **Frontend**: Navbar/Sidebar global con links (Dashboard, Log, History)
+- [x] **Frontend**: Redirección automática de `/` a `/dashboard` (si hay auth) o `/login`
 
 ---
 
-### ⬜ Phase 4 — AI Chat
-- [ ] **Backend**: `POST /api/ai/chat` — conversational endpoint with history
-- [ ] **Backend**: `GET /api/ai/chat/history` — last N messages
-- [ ] **Frontend**: `/chat` page — chat UI with message bubbles
-- [ ] **Frontend**: `ChatInput` + `ChatBubble` components
-- [ ] **Frontend**: Auto-scroll, loading state, error state
-- [ ] **Testing**: Multi-turn conversation with sleep context
+### ✅ Phase 4 — AI Chat (Completed 2026-05-14)
+- [x] **Backend**: `POST /api/ai/chat` — conversational endpoint with history
+- [x] **Backend**: `GET /api/ai/chat/history` — last N messages
+- [x] **Frontend**: `/chat` page — chat UI with message bubbles
+- [x] **Frontend**: `ChatInput` + `ChatBubble` components
+- [x] **Frontend**: Auto-scroll, loading state, error state
+- [x] **Testing**: Multi-turn conversation with sleep context
 
 ---
 

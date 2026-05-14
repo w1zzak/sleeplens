@@ -11,6 +11,8 @@ router.use(authMiddleware);
 
 router.post('/', validate(createSleepLogSchema), sleepController.createSleepLog);
 router.get('/', sleepController.getSleepLogs);
+router.get('/stats', sleepController.getSleepStats);
+router.get('/history', sleepController.getSleepHistory);
 router.get('/:id', sleepController.getSleepLogById);
 router.put('/:id', validate(updateSleepLogSchema), sleepController.updateSleepLog);
 router.delete('/:id', sleepController.deleteSleepLog);

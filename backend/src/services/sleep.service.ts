@@ -90,3 +90,76 @@ export const deleteSleepLog = async (id: string, userId: string): Promise<SleepL
     where: { id },
   });
 };
+
+export interface SleepStats {
+  avgDuration: number;
+  avgQuality: number;
+  currentStreak: number;
+}
+
+export const getSleepStats = async (userId: string): Promise<SleepStats> => {
+  const logs = await prisma.sleepLog.findMany({
+    where: { userId },
+    orderBy: { date: 'desc' },
+  });
+
+  if (logs.length === 0) {
+    return { avgDuration: 0, avgQuality: 0, currentStreak: 0 };
+  }
+
+  const totalQuality = logs.reduce((sum, log) => sum + log.quality, 0);
+  const avgQuality = Number((totalQuality / logs.length).toFixed(1));
+
+  const durationLogs = logs.filter(log => log.duration !== null);
+  let avgDuration = 0;
+  if (durationLogs.length > 0) {
+    const totalDuration = durationLogs.reduce((sum, log) => sum + (log.duration || 0), 0);
+    avgDuration = Number((totalDuration / durationLogs.length).toFixed(1));
+  }
+
+  // Calculate streak based on unique dates
+  const logDates = Array.from(new Set(logs.map(log => {
+    const d = new Date(log.date);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  })));
+
+  let streak = 0;
+  let currentDate = new Date();
+  
+  let dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+  // If no log today, check yesterday to see if streak is still alive
+  if (!logDates.includes(dateString)) {
+    currentDate.setDate(currentDate.getDate() - 1);
+    dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+  }
+
+  while (logDates.includes(dateString)) {
+    streak++;
+    currentDate.setDate(currentDate.getDate() - 1);
+    dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+  }
+
+  return {
+    avgDuration,
+    avgQuality,
+    currentStreak: streak,
+  };
+};
+
+export const getSleepHistory = async (userId: string, year: number, month: number): Promise<SleepLog[]> => {
+  // month is 1-indexed (1 = January, 12 = December)
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 1);
+
+  return prisma.sleepLog.findMany({
+    where: {
+      userId,
+      date: {
+        gte: startDate,
+        lt: endDate,
+      },
+    },
+    orderBy: { date: 'asc' },
+  });
+};
