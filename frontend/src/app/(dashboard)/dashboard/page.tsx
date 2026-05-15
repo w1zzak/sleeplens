@@ -110,8 +110,8 @@ export default function DashboardPage() {
     try {
       const response = await api<string>('/ai/weekly-report', { method: 'POST' });
       setWeeklyReport(response);
-    } catch (error: any) {
-      setReportError(error.message || 'Error al generar el reporte semanal');
+    } catch (error: unknown) {
+      setReportError(error instanceof Error ? error.message : 'Error al generar el reporte semanal');
     } finally {
       setIsGenerating(false);
     }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { api } from '@/lib/api';
-import { ChatMessage, ChatResponse, ChatHistoryResponse } from '@/types/ai';
+import { ChatMessage } from '@/types/ai';
 import { ChatBubble } from '@/components/ai/ChatBubble';
 import { ChatInput } from '@/components/ai/ChatInput';
 
