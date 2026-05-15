@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { sendChatMessage, getChatHistory } from "../services/ai.service";
+import { sendChatMessage, getChatHistory, generateWeeklyReport as generateWeeklyReportService } from "../services/ai.service";
 
 export const chat = async (req: Request, res: Response): Promise<void> => {
     // Aqui irá la lógica para enviar un mensaje
@@ -38,5 +38,23 @@ export const getHistory = async (req: Request, res: Response): Promise<void> => 
     } catch (error: unknown) {
         console.error('Error in getHistory:', error)
         res.status(500).json({ error: 'Error al recuperar el historial' })
+    }
+}
+
+export const generateWeeklyReport = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+        res.status(401).json({ error: 'No autorizado' });
+        return;
+    }
+
+    try {
+        const report = await generateWeeklyReportService(userId);
+        res.status(200).json({ data: report });
+    } catch (error: unknown) {
+        console.error('Error in generateWeeklyReport:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Error al generar el reporte';
+        res.status(400).json({ error: errorMessage });
     }
 }

@@ -99,3 +99,68 @@ export const getChatHistory = async (userId: string): Promise<ChatMessage[]> => 
         throw new Error('Error al recuperar el historial de chat');
     }
 }
+
+export const generateWeeklyReport = async (userId: string): Promise<string> => {
+    try {
+        const recentLogs = await prisma.sleepLog.findMany({
+            where: { userId },
+            orderBy: { bedtime: 'desc' },
+            take: 7,
+        });
+
+        if (recentLogs.length < 3) {
+            throw new Error('No hay suficientes registros para generar un reporte. Se necesitan al menos 3 noches.');
+        }
+
+        const totalHours = recentLogs.reduce((sum, log) => sum + (log.duration || 0), 0);
+        const avgHours = (totalHours / recentLogs.length).toFixed(1);
+        
+        const totalQuality = recentLogs.reduce((sum, log) => sum + log.quality, 0);
+        const avgQuality = (totalQuality / recentLogs.length).toFixed(1);
+
+        const contextSummary = recentLogs.map(log => 
+            `Fecha: ${log.bedtime.toLocaleDateString('es-ES')}, Durmió: ${log.duration}h, Calidad: ${log.quality}/5, ` +
+            `Estrés: ${log.stress}/5, Cafeína: ${log.caffeine ? 'Sí' : 'No'}, Ejercicio: ${log.exercise ? 'Sí' : 'No'}, ` +
+            `Pantallas: ${log.screenTime ? 'Sí' : 'No'}, Alcohol: ${log.alcohol ? 'Sí' : 'No'}`
+        ).reverse().join('\n');
+
+        const systemPrompt = `
+        Eres SleepLens AI, un analista experto en sueño.
+        Tu tarea es generar un Reporte Semanal en formato Markdown estructurado.
+        
+        DATOS DEL USUARIO (Últimos ${recentLogs.length} días):
+        Promedio de horas: ${avgHours}h
+        Calidad promedio: ${avgQuality}/5
+        
+        DETALLE POR DÍA:
+        ${contextSummary}
+        
+        INSTRUCCIONES PARA EL REPORTE:
+        1. Usa Markdown (## para títulos, viñetas para listas, ** para negritas).
+        2. Crea una sección "## Resumen de la Semana".
+        3. Crea una sección "## Análisis de Factores" donde identifiques qué factores (cafeína, ejercicio, estrés) están correlacionados positivamente o negativamente con su calidad y duración.
+        4. Crea una sección "## Recomendaciones" con 2-3 pasos accionables.
+        5. Sé directo, profesional y alentador. No incluyas un saludo largo, ve directo al reporte.
+        `;
+
+        const result = await geminiModel.generateContent({
+            systemInstruction: systemPrompt,
+            contents: [{ role: 'user', parts: [{ text: "Genera mi reporte semanal detallado basándote en mis datos." }] }]
+        });
+
+        const reportMarkdown = result.response.text();
+
+        // Guardar en el log más reciente
+        const latestLog = recentLogs[0];
+        await prisma.sleepLog.update({
+            where: { id: latestLog.id },
+            data: { weeklyReport: reportMarkdown }
+        });
+
+        return reportMarkdown;
+    } catch (error) {
+        console.error('Error in generateWeeklyReport:', error);
+        if (error instanceof Error) throw error;
+        throw new Error('Error al generar el reporte semanal');
+    }
+}

@@ -10,5 +10,6 @@ router.use(authMiddleware);
 
 router.post('/chat', validate(chatSchema), aiController.chat);
 router.get('/history', aiController.getHistory);
+router.post('/weekly-report', aiController.generateWeeklyReport);
 
 export default router;

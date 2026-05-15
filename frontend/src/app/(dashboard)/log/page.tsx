@@ -52,10 +52,10 @@ export default function LogPage() {
 
   return (
     <div className="min-h-screen bg-obsidian p-4 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-primary">Registro Diario</h1>
-          <p className="text-slate-muted mt-2">Registra tu sueño para obtener insights y análisis semanales.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-primary">Registro Diario</h1>
+          <p className="text-slate-muted mt-1 md:mt-2 text-sm md:text-base">Registra tu sueño para obtener insights y análisis semanales.</p>
         </div>
 
         {error && (
@@ -64,12 +64,12 @@ export default function LogPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
           <div>
             <SleepLogForm onSubmit={handleSubmit} />
           </div>
           
-          <div className="bg-obsidian-card p-6 rounded-2xl border border-sleep-border shadow-md h-fit">
+          <div className="bg-obsidian-card p-4 md:p-6 rounded-2xl border border-sleep-border shadow-md h-fit">
             {isLoading ? (
               <div className="flex justify-center py-8">
                 <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>

@@ -320,18 +320,18 @@ Route → Controller → Service → Prisma
 
 ---
 
-### ⬜ Phase 5 — Weekly Report
-- [ ] **Backend**: `POST /api/ai/weekly-report` — aggregate 7 logs, generate report
-- [ ] **Frontend**: Report display in dashboard (markdown rendered)
-- [ ] **Frontend**: "Generate Report" button with loading state
-- [ ] **Testing**: Report generation with at least 7 days of data
+### ✅ Phase 5 — Weekly Report (Completed 2026-05-15)
+- [x] **Backend**: `POST /api/ai/weekly-report` — aggregate 7 logs, generate report
+- [x] **Frontend**: Report display in dashboard (markdown rendered)
+- [x] **Frontend**: "Generate Report" button with loading state
+- [x] **Testing**: Report generation with at least 7 days of data
 
 ---
 
-### ⬜ Phase 6 — Polish & Deploy
-- [ ] Responsive design audit (mobile-first)
-- [ ] Loading skeletons on all data-fetching components
-- [ ] Empty states with helpful prompts
-- [ ] Error boundary components
-- [ ] README with setup instructions and screenshots
+### ✅ Phase 6 — Polish & Deploy (Completed 2026-05-15)
+- [x] Loading skeletons on all data-fetching components (dashboard, history, chat)
+- [x] Empty states with helpful prompts (dashboard, history)
+- [x] Error boundary components (wrapping all dashboard pages)
+- [x] README with setup instructions and API reference
+- [x] Responsive design audit (mobile-first) — bottom nav, single-column layouts, mobile padding
 - [ ] Deploy: backend on Railway/Render, frontend on Vercel
