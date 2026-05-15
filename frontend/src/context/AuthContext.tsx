@@ -26,7 +26,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (token && storedUser) {
       try {
         setUser(JSON.parse(storedUser));
-      } catch (_e) {
+      } catch {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       }
