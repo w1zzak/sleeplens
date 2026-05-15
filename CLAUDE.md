@@ -18,7 +18,7 @@ Sleep tracking app with AI insights. Portfolio project showcasing full-stack dev
 - **Runtime**: Node.js + Express
 - **Language**: TypeScript (strict)
 - **ORM**: Prisma
-- **Database**: SQLite
+- **Database**: PostgreSQL (Supabase)
 - **Auth**: JWT (jsonwebtoken)
 - **Validation**: Zod
 - **AI**: Google Generative AI SDK (`@google/generative-ai`)
